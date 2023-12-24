@@ -1,0 +1,7 @@
+export enum UserType {
+    OWNER = 'OWNER_BUSINESS',
+    PERSONAL_DOCTOR = 'DOCTOR',
+    ASSISTANT = 'ASSISTANT',
+    PATIENT = 'PATIENT',
+    NOT_SELECTED = 'NOT_SELECTED',
+}
