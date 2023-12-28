@@ -32,12 +32,12 @@ export class PropertyE extends ParentEntity {
     @Column({
         default: 0.0,
     })
-    waterService: number;
+    waterServicePrice: number;
 
     @Column({
         default: 0.0,
     })
-    internetService: number;
+    internetServicePrice: number;
 
     @ManyToOne(() => UserE, user => user.properties)
     propertyUser: UserE;
