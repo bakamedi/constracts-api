@@ -1,4 +1,4 @@
-import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler, BadRequestException } from '@nestjs/common';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { QueryFailedError } from 'typeorm';
@@ -9,7 +9,12 @@ export class TypeORMErrorInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       catchError((error) => {
+        if (error.code === '23505')
+          throw new BadRequestException('El Usuario ya existe');
+
         if (error instanceof QueryFailedError) {
+          console.log(error);
+        
           // Puedes personalizar el manejo del error de TypeORM aquí
           console.error('Error de TypeORM:', error.message);
 
