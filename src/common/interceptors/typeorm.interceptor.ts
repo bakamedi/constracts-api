@@ -13,7 +13,6 @@ export class TypeORMErrorInterceptor implements NestInterceptor {
           throw new BadRequestException('El Usuario ya existe');
 
         if (error instanceof QueryFailedError) {
-          console.log(error);
         
           // Puedes personalizar el manejo del error de TypeORM aquí
           console.error('Error de TypeORM:', error.message);

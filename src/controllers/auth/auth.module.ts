@@ -14,8 +14,10 @@ export class AuthModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
-      .exclude({ path: 'user/login', method: RequestMethod.POST }) // Rutas sin autenticación
-      .exclude({ path: 'user/register', method: RequestMethod.POST })
+      .exclude(
+        { path: 'user/register', method: RequestMethod.POST },
+        { path: 'user/login', method: RequestMethod.POST },
+      )
       .forRoutes(UserController);
   }
 }

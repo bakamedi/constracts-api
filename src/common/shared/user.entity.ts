@@ -68,7 +68,12 @@ export abstract class UserEntity extends ParentEntity {
 
     @BeforeInsert()
     checkFieldsBeforeInsert() {
-        this.email = this.email.toLowerCase().trim();
+        if (this.email) {
+            this.email = this.email.toLowerCase().trim();
+        }
+        if (this.fullname) {
+            this.fullname = this.fullname.trim();
+        }
     }
 
     @BeforeUpdate()
