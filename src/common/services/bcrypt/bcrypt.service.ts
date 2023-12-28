@@ -4,7 +4,7 @@ import { IBcryptService } from './interfaces/bcrypt.interface';
 
 @Injectable()
 export class BcryptService implements IBcryptService {
-  rounds: number = 100;
+  rounds: number = 10;
 
   hash(hashString: string): string {
     return bcrypt.hashSync(hashString, this.rounds);

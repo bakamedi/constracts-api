@@ -1,7 +1,5 @@
 export enum UserType {
-    OWNER = 'OWNER_BUSINESS',
-    PERSONAL_DOCTOR = 'DOCTOR',
-    ASSISTANT = 'ASSISTANT',
-    PATIENT = 'PATIENT',
+    LAND_LORD = 'LAND_LORD',
+    LESSER = 'LESSER',
     NOT_SELECTED = 'NOT_SELECTED',
 }
