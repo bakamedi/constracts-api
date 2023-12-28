@@ -1,11 +1,10 @@
 import { UserEntity } from "src/common/shared/user.entity";
-import { Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
+import { PropertyE } from "src/controllers/property/entities/property.entity";
+import { Entity, OneToMany, } from "typeorm";
 
 @Entity()
-export class User extends UserEntity {
-    @ManyToOne(() => User, user => user.lessor)
-    landlord: User;
+export class UserE extends UserEntity {
 
-    @OneToMany(() => User, user => user.landlord)
-    lessor: User[];
+    @OneToMany(() => PropertyE, property => property.propertyUser)
+    properties: PropertyE[];
 }
