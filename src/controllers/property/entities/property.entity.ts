@@ -24,6 +24,16 @@ export class PropertyE extends ParentEntity {
     })
     electricService: boolean;
 
+    @Column('bool',{
+        default: false,
+    })
+    waterService: boolean;
+
+    @Column('bool',{
+        default: false,
+    })
+    internetService: boolean;
+
     @Column({
         default: 0.0,
     })
