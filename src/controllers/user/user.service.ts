@@ -57,19 +57,35 @@ export class UserService {
     };
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async getUser(user: UserE): Promise<UserE> {
+    const { id } = user;
+    const userResp = await this.userRepository.findOne(
+      {
+        where: { id },
+        relations: {
+          properties: true,
+        }
+      }
+    );
+
+    return userResp;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
+  async updateUser(user: UserE, updateUserDto: UpdateUserDto) {
+    const { id } = user;
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+    const userResp = await this.userRepository.findOne(
+      {
+        where: { id },
+        relations: {
+          properties: true,
+        },
+      }
+    );
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+    return await this.userRepository.save({
+      ...userResp, // existing fields
+      ...updateUserDto // updated fields
+    });
   }
 }
