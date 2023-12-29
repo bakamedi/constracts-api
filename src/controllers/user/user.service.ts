@@ -68,10 +68,12 @@ export class UserService {
       }
     );
 
+    delete userResp.password;
+
     return userResp;
   }
 
-  async updateUser(user: UserE, updateUserDto: UpdateUserDto) {
+  async updateUser(user: UserE, updateUserDto: UpdateUserDto): Promise<UserE> {
     const { id } = user;
 
     const userResp = await this.userRepository.findOne(
@@ -82,6 +84,8 @@ export class UserService {
         },
       }
     );
+
+    delete user.password;
 
     return await this.userRepository.save({
       ...userResp, // existing fields
