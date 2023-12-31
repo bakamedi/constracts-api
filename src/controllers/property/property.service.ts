@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { UserE } from '../user/entities/user.entity';
@@ -17,7 +17,6 @@ export class PropertyService {
   ) { }
 
   async create(user: UserE, createPropertyDto: CreatePropertyDto): Promise<PropertyE> {
-    console.log(user);
     const propertyDto = this.propertyRepository.create({
       ...createPropertyDto,
       propertyUser: user,
@@ -26,19 +25,65 @@ export class PropertyService {
 
   }
 
-  findAll() {
-    return `This action returns all property`;
+  async findAll(user: UserE): Promise<PropertyE[]> {
+    console.log(user);
+    const properties = await this.propertyRepository.find({
+      where: {
+        propertyUser: {
+          id: user.id
+        }
+      }
+    });
+
+    if (!properties) {
+      throw new InternalServerErrorException('Property not found (request)');
+    }
+    return properties;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} property`;
+  async findOne(id: string, user: UserE): Promise<PropertyE> {
+    const property = await this.propertyRepository.findOne({
+      where: {
+        id: id,
+        propertyUser: {
+          id: user.id
+        }
+      },
+    });
+
+    return property;
   }
 
-  update(id: number, updatePropertyDto: UpdatePropertyDto) {
-    return `This action updates a #${id} property`;
+  async update(user: UserE, id: string, updatePropertyDto: UpdatePropertyDto): Promise<PropertyE> {
+    const property = await this.propertyRepository.findOne({
+      where: {
+        id: id,
+        propertyUser: {
+          id: user.id
+        }
+      },
+    });
+    if (!property)
+      throw new InternalServerErrorException('Property not found (request)');
+
+    return await this.propertyRepository.save({
+      ...property,
+      ...updatePropertyDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} property`;
+  async remove(user: UserE, id: string) {
+    const property = await this.propertyRepository.findOne({
+      where: {
+        id: id,
+        propertyUser: {
+          id: user.id
+        }
+      },
+    });
+    if (!property)
+      throw new InternalServerErrorException('Property not found (request)');
+
+    return await this.propertyRepository.delete(id);
   }
 }

@@ -18,6 +18,8 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {
     const { password, ...userData } = createUserDto;
 
+    console.log(createUserDto);
+
     const user = this.userRepository.create({
       ...userData,
       password: this.authService.hashPassword(password)

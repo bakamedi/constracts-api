@@ -15,15 +15,21 @@ export abstract class UserEntity extends ParentEntity {
     @Column('text', {
         unique: true,
         nullable: true,
+        default: '',
     })
     ruc: string;
 
     @Column('text', {
         unique: true,
+        nullable: true,
+        default: '',
     })
     nui: string;
 
-    @Column('text')
+    @Column('text', {
+        nullable: true,
+        default: '',
+    })
     passport: string;
 
     @Column('text', {
