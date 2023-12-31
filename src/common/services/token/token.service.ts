@@ -4,10 +4,10 @@ import { IJwtService, IJwtServicePayload } from './interfaces/token.interface';
 
 @Injectable()
 export class JwtTokenService implements IJwtService {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(private readonly jwtService: JwtService) { }
 
-  checkToken(token: string): Promise<any> {
-    const decode =  this.jwtService.verify(token);
+  async checkToken(token: string): Promise<any> {
+    const decode = await this.jwtService.verifyAsync(token);
     return decode;
   }
 

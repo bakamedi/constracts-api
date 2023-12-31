@@ -4,9 +4,10 @@ import { AuthMiddleware } from './middleware/auth.middleware';
 import { UserController } from '../user/user.controller';
 import { MyJwtModule } from 'src/common/services/token/token.module';
 import { BcryptModule } from 'src/common/services/bcrypt/bcrypt.module';
+import { PropertyController } from '../property/property.controller';
 
 @Module({
-  imports: [MyJwtModule,BcryptModule],
+  imports: [MyJwtModule, BcryptModule],
   providers: [AuthService],
   exports: [AuthService]
 })
@@ -18,6 +19,6 @@ export class AuthModule {
         { path: 'user/register', method: RequestMethod.POST },
         { path: 'user/login', method: RequestMethod.POST },
       )
-      .forRoutes(UserController);
+      .forRoutes(UserController, PropertyController);
   }
 }

@@ -1,11 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
+import { UserE } from '../user/entities/user.entity';
+import { PropertyE } from './entities/property.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class PropertyService {
-  create(createPropertyDto: CreatePropertyDto) {
-    return 'This action adds a new property';
+
+  constructor(
+
+    @InjectRepository(PropertyE)
+    private readonly propertyRepository: Repository<PropertyE>,
+
+  ) { }
+
+  async create(user: UserE, createPropertyDto: CreatePropertyDto): Promise<PropertyE> {
+    console.log(user);
+    const propertyDto = this.propertyRepository.create({
+      ...createPropertyDto,
+      propertyUser: user,
+    });
+    return await this.propertyRepository.save(propertyDto);
+
   }
 
   findAll() {

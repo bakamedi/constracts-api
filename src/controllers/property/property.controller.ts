@@ -2,14 +2,16 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { PropertyService } from './property.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
+import { UserE } from '../user/entities/user.entity';
+import { GetUser } from 'src/common/decorators/get-user.decorator';
 
 @Controller('property')
 export class PropertyController {
-  constructor(private readonly propertyService: PropertyService) {}
+  constructor(private readonly propertyService: PropertyService) { }
 
   @Post()
-  create(@Body() createPropertyDto: CreatePropertyDto) {
-    return this.propertyService.create(createPropertyDto);
+  create(@GetUser() user: UserE, @Body() createPropertyDto: CreatePropertyDto) {
+    return this.propertyService.create(user, createPropertyDto);
   }
 
   @Get()

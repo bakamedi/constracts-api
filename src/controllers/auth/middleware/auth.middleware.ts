@@ -9,16 +9,12 @@ export class AuthMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: () => void) {
     const bearerHeader = req.headers.authorization;
     const accessToken = bearerHeader && bearerHeader.split(' ')[1];
-    let user;
-
-    console.log(bearerHeader);
-    console.log(accessToken);
-
 
     if (accessToken) {
       try {
         const decoded = await this.jwtTokenService.checkToken(accessToken);
-        req['user'] = decoded;
+        req['id'] = decoded.id;
+
         next();
       } catch (error) {
         throw new BadRequestException('Token invalido');
