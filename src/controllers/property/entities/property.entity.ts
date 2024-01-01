@@ -1,6 +1,7 @@
 import { ParentEntity } from "src/common/shared/parent.entity";
+import { ContractE } from "src/controllers/contract/entities/contract.entity";
 import { UserE } from "src/controllers/user/entities/user.entity";
-import { Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 
 @Entity()
 export class PropertyE extends ParentEntity {
@@ -19,17 +20,17 @@ export class PropertyE extends ParentEntity {
     @Column()
     price: number;
 
-    @Column('bool',{
+    @Column('bool', {
         default: false,
     })
     electricService: boolean;
 
-    @Column('bool',{
+    @Column('bool', {
         default: false,
     })
     waterService: boolean;
 
-    @Column('bool',{
+    @Column('bool', {
         default: false,
     })
     internetService: boolean;
@@ -52,4 +53,6 @@ export class PropertyE extends ParentEntity {
     @ManyToOne(() => UserE, user => user.properties)
     propertyUser: UserE;
 
+    @OneToMany(() => ContractE, contract => contract.property)
+    contracts: ContractE[];
 }
