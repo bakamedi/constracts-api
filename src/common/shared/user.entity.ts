@@ -1,4 +1,4 @@
-import { BeforeInsert, BeforeUpdate, Column, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column } from 'typeorm';
 import { ParentEntity } from './parent.entity';
 import { UserGender } from '../enum/user.gender';
 import { UserType } from '../enum/user.type';
@@ -75,7 +75,7 @@ export abstract class UserEntity extends ParentEntity {
     @BeforeInsert()
     checkFieldsBeforeInsert() {
         if (this.email) {
-            this.email = this.email.toLowerCase().trim();
+            this.email = this.email.trim();
         }
         if (this.fullname) {
             this.fullname = this.fullname.trim();
