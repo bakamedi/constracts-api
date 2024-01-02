@@ -30,7 +30,7 @@ export class UserService {
 
     return {
       ...user,
-      token: this.authService.generateToken({ id: user.id }),
+      token: this.authService.generateToken({ user }),
     };
 
   }
@@ -55,12 +55,27 @@ export class UserService {
 
     return {
       ...user,
-      token: this.authService.generateToken({ id: user.id, }),
+      token: this.authService.generateToken({ user }),
     };
   }
 
   async getUser(user: UserE): Promise<UserE> {
     const { id } = user;
+    const userResp = await this.userRepository.findOne(
+      {
+        where: { id },
+        relations: {
+          properties: true,
+        }
+      }
+    );
+
+    delete userResp.password;
+
+    return userResp;
+  }
+
+  async getUserById(id: string): Promise<UserE> {
     const userResp = await this.userRepository.findOne(
       {
         where: { id },

@@ -2,14 +2,16 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ContractService } from './contract.service';
 import { CreateContractDto } from './dto/create-contract.dto';
 import { UpdateContractDto } from './dto/update-contract.dto';
+import { UserE } from '../user/entities/user.entity';
+import { GetUser } from 'src/common/decorators/get-user.decorator';
 
 @Controller('contract')
 export class ContractController {
-  constructor(private readonly contractService: ContractService) {}
+  constructor(private readonly contractService: ContractService) { }
 
   @Post()
-  create(@Body() createContractDto: CreateContractDto) {
-    return this.contractService.create(createContractDto);
+  create(@GetUser() user: UserE, @Body() createContractDto: CreateContractDto) {
+    return this.contractService.create(user, createContractDto);
   }
 
   @Get()

@@ -1,5 +1,7 @@
+import { UserE } from "src/controllers/user/entities/user.entity";
+
 export interface IJwtServicePayload {
-    id: string;
+    user: UserE;
 }
   
 export interface IJwtService {

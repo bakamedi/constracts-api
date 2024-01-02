@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BcryptService } from 'src/common/services/bcrypt/bcrypt.service';
+import { IJwtServicePayload } from 'src/common/services/token/interfaces/token.interface';
 import { JwtTokenService } from 'src/common/services/token/token.service';
 
 @Injectable()
@@ -9,7 +10,7 @@ export class AuthService {
     private readonly jwtService: JwtTokenService,
   ) { }
 
-  generateToken(payload: any): string {
+  generateToken(payload: IJwtServicePayload): string {
     return this.jwtService.createToken(payload);
   }
 

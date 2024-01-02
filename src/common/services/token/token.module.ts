@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { JwtTokenService } from './token.service';
 import { JwtModule as Jwt } from '@nestjs/jwt';
-import { authConfig } from './utils/auth.config';
+import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     Jwt.registerAsync({
       imports: [ ConfigModule ],
       inject: [ ConfigService ],

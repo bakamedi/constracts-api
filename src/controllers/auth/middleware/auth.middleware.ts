@@ -4,7 +4,9 @@ import { JwtTokenService } from '../../../common/services/token/token.service';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
-  constructor(private readonly jwtTokenService: JwtTokenService) {}
+  constructor(
+    private readonly jwtTokenService: JwtTokenService, 
+  ) {}
 
   async use(req: Request, res: Response, next: () => void) {
     const bearerHeader = req.headers.authorization;
@@ -13,7 +15,7 @@ export class AuthMiddleware implements NestMiddleware {
     if (accessToken) {
       try {
         const decoded = await this.jwtTokenService.checkToken(accessToken);
-        req['id'] = decoded.id;
+        req['user'] = decoded['user'];
 
         next();
       } catch (error) {
