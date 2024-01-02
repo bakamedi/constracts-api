@@ -18,8 +18,6 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {
     const { password, ...userData } = createUserDto;
 
-    console.log(createUserDto);
-
     const user = this.userRepository.create({
       ...userData,
       password: this.authService.hashPassword(password)
@@ -61,21 +59,6 @@ export class UserService {
 
   async getUser(user: UserE): Promise<UserE> {
     const { id } = user;
-    const userResp = await this.userRepository.findOne(
-      {
-        where: { id },
-        relations: {
-          properties: true,
-        }
-      }
-    );
-
-    delete userResp.password;
-
-    return userResp;
-  }
-
-  async getUserById(id: string): Promise<UserE> {
     const userResp = await this.userRepository.findOne(
       {
         where: { id },

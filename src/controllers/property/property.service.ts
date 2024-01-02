@@ -26,7 +26,6 @@ export class PropertyService {
   }
 
   async findAll(user: UserE): Promise<PropertyE[]> {
-    console.log(user);
     const properties = await this.propertyRepository.find({
       where: {
         propertyUser: {

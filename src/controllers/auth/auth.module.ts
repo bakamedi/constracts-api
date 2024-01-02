@@ -5,6 +5,7 @@ import { UserController } from '../user/user.controller';
 import { MyJwtModule } from 'src/common/services/token/token.module';
 import { BcryptModule } from 'src/common/services/bcrypt/bcrypt.module';
 import { PropertyController } from '../property/property.controller';
+import { ContractController } from '../contract/contract.controller';
 
 @Module({
   imports: [MyJwtModule, BcryptModule],
@@ -19,6 +20,6 @@ export class AuthModule {
         { path: 'user/register', method: RequestMethod.POST },
         { path: 'user/login', method: RequestMethod.POST },
       )
-      .forRoutes(UserController, PropertyController);
+      .forRoutes(UserController, PropertyController, ContractController);
   }
 }

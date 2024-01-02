@@ -14,10 +14,22 @@ export class ContractService {
     @InjectRepository(ContractE)
     private readonly contractRepository: Repository<ContractE>,
 
+    @InjectRepository(UserE)
+    private readonly userRepository: Repository<UserE>,
+
   ) { }
 
   async create(user: UserE, createContractDto: CreateContractDto): Promise<ContractE> {
-    const propertyExist = user.properties.find((item) => item.id === createContractDto.idProperty);
+    const id = user.id;
+    const userResp = await this.userRepository.findOne(
+      {
+        where: { id },
+        relations: {
+          properties: true,
+        }
+      }
+    );
+    const propertyExist = userResp.properties.find((item) => item.id === createContractDto.idProperty);
     if (!propertyExist) {
       throw new InternalServerErrorException('Property not found (request)');
     }
