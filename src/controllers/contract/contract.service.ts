@@ -92,8 +92,39 @@ export class ContractService {
     return contract;
   }
 
-  update(id: number, updateContractDto: UpdateContractDto) {
-    return `This action updates a #${id} contract`;
+  async update(
+    id: string,
+    user: UserE,
+    updateContractDto: UpdateContractDto
+  ): Promise<ContractE> {
+    console.log(id);
+
+    const userResp = await this.userRepository.findOne(
+      {
+        where: { id: user.id },
+        relations: {
+          properties: true,
+        }
+      }
+    );
+    const propertyExist = userResp.properties.find((item) => item.id === updateContractDto.idProperty);
+
+    if (!propertyExist) {
+      throw new InternalServerErrorException('Contract not found (request)');
+    }
+    const contract = await this.contractRepository.findOne({
+      where: {
+        id: id,
+        property: {
+          id: propertyExist.id
+        }
+      }
+    });
+
+    return await this.contractRepository.save({
+      ...contract,
+      ...updateContractDto,
+    });
   }
 
   remove(id: number) {

@@ -16,18 +16,29 @@ export class ContractController {
   }
 
   @Get('')
-  async findAll(@Query('idProperty') idProperty: string, @GetUser() user: UserE): Promise<ContractE[]> {
+  async findAll(
+    @Query('idProperty') idProperty: string, 
+    @GetUser() user: UserE
+  ): Promise<ContractE[]> {
     return await this.contractService.findAll(user, idProperty);
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string, @Query('idProperty') idProperty: string, @GetUser() user: UserE): Promise<ContractE> {
+  async findOne(
+    @Param('id') id: string,
+    @Query('idProperty') idProperty: string,
+    @GetUser() user: UserE
+  ): Promise<ContractE> {
     return await this.contractService.findOne(id, idProperty, user);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateContractDto: UpdateContractDto) {
-    return this.contractService.update(+id, updateContractDto);
+  async update(
+    @Param('id') id: string,
+    @GetUser() user: UserE,
+    @Body() updateContractDto: UpdateContractDto
+  ): Promise<ContractE> {
+    return await this.contractService.update(id, user, updateContractDto);
   }
 
   @Delete(':id')
