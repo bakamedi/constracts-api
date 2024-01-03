@@ -21,8 +21,8 @@ export class ContractController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.contractService.findOne(+id);
+  async findOne(@Param('id') id: string, @Query('idProperty') idProperty: string, @GetUser() user: UserE): Promise<ContractE> {
+    return await this.contractService.findOne(id, idProperty, user);
   }
 
   @Patch(':id')

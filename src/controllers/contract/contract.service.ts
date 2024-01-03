@@ -65,8 +65,31 @@ export class ContractService {
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} contract`;
+  async findOne(id: string, idProperty: string, user: UserE): Promise<ContractE> {
+    const userResp = await this.userRepository.findOne(
+      {
+        where: { id: user.id },
+        relations: {
+          properties: true,
+        }
+      }
+    );
+
+    const propertyExist = userResp.properties.find((item) => item.id === idProperty);
+
+    if (!propertyExist) {
+      throw new InternalServerErrorException('Property not found (request)');
+    }
+    const contract = await this.contractRepository.findOne({
+      where: {
+        id: id,
+        property: {
+          id: propertyExist.id
+        }
+      }
+    });
+
+    return contract;
   }
 
   update(id: number, updateContractDto: UpdateContractDto) {
