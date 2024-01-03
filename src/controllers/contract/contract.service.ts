@@ -33,12 +33,36 @@ export class ContractService {
     if (!propertyExist) {
       throw new InternalServerErrorException('Property not found (request)');
     }
-    const contractDto = this.contractRepository.create(createContractDto);
+    const contractDto = this.contractRepository.create({
+      ...createContractDto,
+      property: propertyExist
+    });
     return await this.contractRepository.save(contractDto);
   }
 
-  findAll() {
-    return `This action returns all contract`;
+  async findAll(user: UserE, idProperty: string): Promise<ContractE[]> {
+    const id = user.id;
+    const userResp = await this.userRepository.findOne(
+      {
+        where: { id },
+        relations: {
+          properties: true,
+        }
+      }
+    );
+
+    const propertyExist = userResp.properties.find((item) => item.id === idProperty);
+
+    if (!propertyExist) {
+      throw new InternalServerErrorException('Property not found (request)');
+    }
+    return await this.contractRepository.find({
+      where: {
+        property: {
+          id: propertyExist.id
+        }
+      }
+    });
   }
 
   findOne(id: number) {

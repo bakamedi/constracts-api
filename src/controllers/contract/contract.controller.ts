@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ContractService } from './contract.service';
 import { CreateContractDto } from './dto/create-contract.dto';
 import { UpdateContractDto } from './dto/update-contract.dto';
 import { UserE } from '../user/entities/user.entity';
 import { GetUser } from 'src/common/decorators/get-user.decorator';
+import { ContractE } from './entities/contract.entity';
 
 @Controller('contract')
 export class ContractController {
@@ -14,9 +15,9 @@ export class ContractController {
     return this.contractService.create(user, createContractDto);
   }
 
-  @Get()
-  findAll() {
-    return this.contractService.findAll();
+  @Get('')
+  async findAll(@Query('idProperty') idProperty: string, @GetUser() user: UserE): Promise<ContractE[]> {
+    return await this.contractService.findAll(user, idProperty);
   }
 
   @Get(':id')
