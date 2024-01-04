@@ -25,8 +25,13 @@ export class BillController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.billService.findOne(+id);
+  findOne(
+    @Param('id') id: string,
+    @Query('idProperty') idProperty: string,
+    @Query('idContract') idContract: string,
+    @GetUser() user: UserE,
+  ) {
+    return this.billService.findOne(id, idContract, idProperty, user);
   }
 
   @Patch(':id')

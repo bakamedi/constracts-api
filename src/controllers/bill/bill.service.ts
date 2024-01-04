@@ -94,8 +94,41 @@ export class BillService {
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} bill`;
+  async findOne(id: string, idContract: string, idProperty: string, user: UserE): Promise<BillE> {
+    const idUser = user.id;
+
+    const userResp = await this.userRepository.findOne(
+      {
+        where: { id: idUser },
+        relations: {
+          properties: true,
+        }
+      }
+    );
+
+    const propertyExist = userResp.properties.find((item) => item.id === idProperty);
+    if (!propertyExist) {
+      throw new InternalServerErrorException('Property not found (request)');
+    }
+
+    const contractExist = await this.contractRepository.findOne(
+      {
+        where: { id: idContract },
+      }
+    );
+
+    if (!contractExist) {
+      throw new InternalServerErrorException('Contract not found (request)');
+    }
+
+    return await this.billRepository.findOne({
+      where: {
+        id: id,
+        contract: {
+          id: contractExist.id
+        }
+      }
+    });
   }
 
   update(id: number, updateBillDto: UpdateBillDto) {
