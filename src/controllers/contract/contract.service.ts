@@ -97,7 +97,6 @@ export class ContractService {
     user: UserE,
     updateContractDto: UpdateContractDto
   ): Promise<ContractE> {
-    console.log(id);
 
     const userResp = await this.userRepository.findOne(
       {
@@ -127,7 +126,35 @@ export class ContractService {
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} contract`;
+  async remove(id: string, idProperty: string, user: UserE) {
+    const userResp = await this.userRepository.findOne(
+      {
+        where: { id: user.id },
+        relations: {
+          properties: true,
+        }
+      }
+    );
+
+    const propertyExist = userResp.properties.find((item) => item.id === idProperty);
+
+    if (!propertyExist) {
+      throw new InternalServerErrorException('Property not found (request)');
+    }
+
+    const contractExist = await this.contractRepository.findOne({
+      where: {
+        id: id,
+        property: {
+          id: propertyExist.id
+        }
+      }
+    });
+
+    if (!contractExist) {
+      throw new InternalServerErrorException('Contract not found (request)');
+    }
+
+    return await this.contractRepository.delete(contractExist.id);
   }
 }

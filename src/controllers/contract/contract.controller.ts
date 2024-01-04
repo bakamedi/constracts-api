@@ -17,7 +17,7 @@ export class ContractController {
 
   @Get('')
   async findAll(
-    @Query('idProperty') idProperty: string, 
+    @Query('idProperty') idProperty: string,
     @GetUser() user: UserE
   ): Promise<ContractE[]> {
     return await this.contractService.findAll(user, idProperty);
@@ -42,7 +42,11 @@ export class ContractController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.contractService.remove(+id);
+  async remove(
+    @Param('id') id: string,
+    @Query('idProperty') idProperty: string,
+    @GetUser() user: UserE
+  ) {
+    return await this.contractService.remove(id, idProperty, user);
   }
 }
