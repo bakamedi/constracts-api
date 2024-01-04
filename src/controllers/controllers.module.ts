@@ -3,6 +3,7 @@ import { UserModule } from "./user/user.module";
 import { AuthModule } from "./auth/auth.module";
 import { PropertyModule } from './property/property.module';
 import { ContractModule } from './contract/contract.module';
+import { BillModule } from './bill/bill.module';
 
 @Module({
     imports: [
@@ -14,6 +15,8 @@ import { ContractModule } from './contract/contract.module';
       PropertyModule,
   
       ContractModule,
+  
+      BillModule,
   
     ],
     controllers: [],

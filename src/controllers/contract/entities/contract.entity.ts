@@ -1,6 +1,7 @@
-import { ParentEntity } from "src/common/shared/parent.entity";
+import { ParentEntity } from "src/common/shared/index-shared";
+import { BillE } from "src/controllers/bill/entities/bill.entity";
 import { PropertyE } from "src/controllers/property/entities/property.entity";
-import { Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 
 @Entity()
 export class ContractE extends ParentEntity {
@@ -14,4 +15,7 @@ export class ContractE extends ParentEntity {
 
     @ManyToOne(() => PropertyE, (property) => property.contracts)
     property: PropertyE;
+
+    @OneToMany(() => BillE, bill => bill.contract)
+    bills: BillE[];
 }

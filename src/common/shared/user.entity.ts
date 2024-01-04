@@ -1,7 +1,7 @@
 import { BeforeInsert, BeforeUpdate, Column } from 'typeorm';
-import { ParentEntity } from './parent.entity';
 import { UserGender } from '../enum/user.gender';
 import { UserType } from '../enum/user.type';
+import { ParentEntity } from './index-shared';
 
 export abstract class UserEntity extends ParentEntity {
     @Column('bool', {

@@ -1,4 +1,4 @@
-import { ParentEntity } from "src/common/shared/parent.entity";
+import { ParentEntity } from "src/common/shared/index-shared";
 import { ContractE } from "src/controllers/contract/entities/contract.entity";
 import { UserE } from "src/controllers/user/entities/user.entity";
 import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
