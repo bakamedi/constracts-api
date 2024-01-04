@@ -23,7 +23,7 @@ export class BillService {
 
   ) { }
 
-  async create(user: UserE,createBillDto: CreateBillDto): Promise<BillE> {
+  async create(user: UserE, createBillDto: CreateBillDto): Promise<BillE> {
 
     const id = user.id;
     const userResp = await this.userRepository.findOne(
@@ -58,8 +58,40 @@ export class BillService {
     return await this.billRepository.save(billDto);
   }
 
-  findAll() {
-    return `This action returns all bill`;
+  async findAll(user: UserE, idContract: string, idProperty: string): Promise<BillE[]> {
+    const id = user.id;
+
+    const userResp = await this.userRepository.findOne(
+      {
+        where: { id },
+        relations: {
+          properties: true,
+        }
+      }
+    );
+
+    const propertyExist = userResp.properties.find((item) => item.id === idProperty);
+    if (!propertyExist) {
+      throw new InternalServerErrorException('Property not found (request)');
+    }
+
+    const contractExist = await this.contractRepository.findOne(
+      {
+        where: { id: idContract },
+      }
+    );
+
+    if (!contractExist) {
+      throw new InternalServerErrorException('Contract not found (request)');
+    }
+
+    return await this.billRepository.find({
+      where: {
+        contract: {
+          id: contractExist.id
+        }
+      }
+    });
   }
 
   findOne(id: number) {

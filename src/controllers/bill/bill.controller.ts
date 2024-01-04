@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { BillService } from './bill.service';
 import { CreateBillDto } from './dto/create-bill.dto';
 import { UpdateBillDto } from './dto/update-bill.dto';
@@ -15,8 +15,13 @@ export class BillController {
   }
 
   @Get()
-  findAll() {
-    return this.billService.findAll();
+  findAll(
+    @GetUser() user: UserE,
+    @Query('idContract') idContract: string,
+    @Query('idProperty') idProperty: string,
+  ) {
+    console.log('fdsfsd');
+    return this.billService.findAll(user, idContract, idProperty);
   }
 
   @Get(':id')
