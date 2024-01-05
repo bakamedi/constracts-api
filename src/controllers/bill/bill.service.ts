@@ -181,7 +181,46 @@ export class BillService {
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} bill`;
+ async remove(id: string, idProperty: string, idContract: string, user: UserE) {
+    const idUser = user.id;
+    console.log(idUser);
+    const userResp = await this.userRepository.findOne(
+      {
+        where: { id: idUser },
+        relations: {
+          properties: true,
+        }
+      }
+    );
+
+    const propertyExist = userResp.properties.find((item) => item.id === idProperty);
+    if (!propertyExist) {
+      throw new InternalServerErrorException('Property not found (request)');
+    }
+
+    const contractExist = await this.contractRepository.findOne(
+      {
+        where: { id: idContract },
+      }
+    );
+
+    if (!contractExist) {
+      throw new InternalServerErrorException('Contract not found (request)');
+    }
+
+    const billExist = await this.billRepository.findOne({
+      where: {
+        id: id,
+        contract: {
+          id: contractExist.id
+        }
+      }
+    });
+
+    if (!billExist) {
+      throw new InternalServerErrorException('Bill not found (request)');
+    }
+
+    return await this.billRepository.delete(billExist.id);
   }
 }

@@ -44,7 +44,12 @@ export class BillController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.billService.remove(+id);
+  remove(
+    @Param('id') id: string,
+    @Query('idProperty') idProperty: string,
+    @Query('idContract') idContract: string,
+    @GetUser() user: UserE,
+  ) {
+    return this.billService.remove(id, idProperty, idContract, user);
   }
 }
