@@ -131,8 +131,54 @@ export class BillService {
     });
   }
 
-  update(id: number, updateBillDto: UpdateBillDto) {
-    return `This action updates a #${id} bill`;
+  async update(
+    id: string,
+    user: UserE,
+    updateBillDto: UpdateBillDto
+  ) {
+    const idUser = user.id;
+    console.log(idUser);
+    const userResp = await this.userRepository.findOne(
+      {
+        where: { id: idUser },
+        relations: {
+          properties: true,
+        }
+      }
+    );
+
+    const propertyExist = userResp.properties.find((item) => item.id === updateBillDto.idProperty);
+    if (!propertyExist) {
+      throw new InternalServerErrorException('Property not found (request)');
+    }
+
+    const contractExist = await this.contractRepository.findOne(
+      {
+        where: { id: updateBillDto.idContract },
+      }
+    );
+
+    if (!contractExist) {
+      throw new InternalServerErrorException('Contract not found (request)');
+    }
+
+    const billExist = await this.billRepository.findOne({
+      where: {
+        id: id,
+        contract: {
+          id: contractExist.id
+        }
+      }
+    });
+
+    if (!billExist) {
+      throw new InternalServerErrorException('Bill not found (request)');
+    }
+
+    return await this.billRepository.save({
+      ...billExist,
+      ...updateBillDto,
+    });
   }
 
   remove(id: number) {
