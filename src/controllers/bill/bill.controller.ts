@@ -20,7 +20,6 @@ export class BillController {
     @Query('idContract') idContract: string,
     @Query('idProperty') idProperty: string,
   ) {
-    console.log('fdsfsd');
     return this.billService.findAll(user, idContract, idProperty);
   }
 

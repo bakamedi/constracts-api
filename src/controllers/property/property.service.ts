@@ -5,6 +5,8 @@ import { UserE } from '../user/entities/user.entity';
 import { PropertyE } from './entities/property.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { PaginationDto } from 'src/common/shared/pagination.dto';
+import { PaginatedResult } from 'src/common/shared/paginated-result.interface';
 
 @Injectable()
 export class PropertyService {
@@ -25,8 +27,11 @@ export class PropertyService {
 
   }
 
-  async findAll(user: UserE): Promise<PropertyE[]> {
-    const properties = await this.propertyRepository.find({
+  async findAll(user: UserE, paginationDto: PaginationDto): Promise<PaginatedResult<PropertyE>>{
+    const { page, limit } = paginationDto;
+    const [results, total] = await this.propertyRepository.findAndCount({
+      take: limit,
+      skip: (page - 1) * limit,
       where: {
         propertyUser: {
           id: user.id
@@ -34,10 +39,15 @@ export class PropertyService {
       }
     });
 
-    if (!properties) {
+    if (!results) {
       throw new InternalServerErrorException('Property not found (request)');
     }
-    return properties;
+    return {
+      data: [...results],
+      total,
+      page,
+      limit,
+    };
   }
 
   async findOne(id: string, user: UserE): Promise<PropertyE> {

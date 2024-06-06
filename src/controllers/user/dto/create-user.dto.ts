@@ -15,7 +15,6 @@ export class CreateUserDto {
     })
     password: string;
 
-    @MinLength(1)
     fullname: string;
 
     @IsOptional()

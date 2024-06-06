@@ -72,18 +72,4 @@ export abstract class UserEntity extends ParentEntity {
     })
     urlPath: string;
 
-    @BeforeInsert()
-    checkFieldsBeforeInsert() {
-        if (this.email) {
-            this.email = this.email.trim();
-        }
-        if (this.fullname) {
-            this.fullname = this.fullname.trim();
-        }
-    }
-
-    @BeforeUpdate()
-    checkFieldsBeforeUpdate() {
-        this.checkFieldsBeforeInsert();
-    }
 }

@@ -1,13 +1,9 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
-import { ApiProperty } from '@nestjs/swagger';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { PaginationDto } from '../shared/pagination.dto';
 
 export class ResponseFormat<T> {
-  @ApiProperty()
-  duration: string;
-  @ApiProperty()
-  method: string;
 
   data: T;
 }
@@ -15,16 +11,14 @@ export class ResponseFormat<T> {
 @Injectable()
 export class ResponseInterceptor<T> implements NestInterceptor<T, ResponseFormat<T>> {
   intercept(context: ExecutionContext, next: CallHandler): Observable<ResponseFormat<T>> {
-    const now = Date.now();
-    const httpContext = context.switchToHttp();
-    const request = httpContext.getRequest();
+    const request = context.switchToHttp().getRequest();
+    const query = request.query;
+    const paginationDto = new PaginationDto();
+    paginationDto.page = Number(query.page) || 1;
+    paginationDto.limit = Number(query.limit) || 10;
 
-    return next.handle().pipe(
-      map((data) => ({
-        data,
-        duration: `${Date.now() - now}ms`,
-        method: request.method,
-      })),
-    );
+    request.pagination = paginationDto;
+
+    return next.handle();
   }
 }
