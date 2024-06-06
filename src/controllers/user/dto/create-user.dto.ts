@@ -15,6 +15,7 @@ export class CreateUserDto {
     })
     password: string;
 
+    @IsString()
     fullname: string;
 
     @IsOptional()
@@ -33,7 +34,6 @@ export class CreateUserDto {
     birthday: string;
 
     @IsOptional()
-    @IsUrl()
     urlPath: string;
 
     @IsOptional()

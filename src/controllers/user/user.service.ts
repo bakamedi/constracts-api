@@ -1,9 +1,10 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { UserE } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from '../auth/auth.service';
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto/index-user.dto';
+import { mkDirByPathSync } from 'src/common/utils/folder-create.utils';
 
 @Injectable()
 export class UserService {
@@ -23,13 +24,23 @@ export class UserService {
       password: this.authService.hashPassword(password)
     });
 
-    await this.userRepository.save(user)
-    delete user.password;
+    const path = `./uploads/users/${user.email}`;
 
-    return {
-      ...user,
-      token: this.authService.generateToken({ user }),
-    };
+    const createdDir = await mkDirByPathSync(path);
+
+    if(createdDir) {
+
+      await this.userRepository.save(user)
+      delete user.password;
+
+      return {
+        ...user,
+        token: this.authService.generateToken({ user }),
+      };
+    } else {
+      throw new BadRequestException('error');
+    }
+
 
   }
 

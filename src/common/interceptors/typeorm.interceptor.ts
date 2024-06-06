@@ -9,6 +9,7 @@ export class TypeORMErrorInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       catchError((error) => {
+        console.log(error);
         if (error.code === '23505')
           throw new BadRequestException('El Usuario ya existe');
 

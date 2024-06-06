@@ -13,14 +13,12 @@ export abstract class UserEntity extends ParentEntity {
     fullname: string;
 
     @Column('text', {
-        unique: true,
         nullable: true,
         default: '',
     })
     ruc: string;
 
     @Column('text', {
-        unique: true,
         nullable: true,
         default: '',
     })
