@@ -16,7 +16,7 @@ export class UserService {
 
   ) { }
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto, imagePaths: string[]) {
     const { password, ...userData } = createUserDto;
 
     const user = this.userRepository.create({
@@ -40,8 +40,6 @@ export class UserService {
     } else {
       throw new BadRequestException('error');
     }
-
-
   }
 
   async login(loginUserDto: LoginUserDto) {

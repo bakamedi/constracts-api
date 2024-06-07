@@ -11,7 +11,6 @@ import { join } from 'path';
       dest: join(__dirname, '..', 'uploads'), // Ruta absoluta para el directorio de subida
     }),
     ConfigModule.forRoot(),
-
     DatabaseModule,
     ControllersModule,
   ],

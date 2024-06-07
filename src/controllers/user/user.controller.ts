@@ -1,17 +1,22 @@
-import { Controller, Get, Post, Body, Put, } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, UploadedFiles, } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserE } from './entities/user.entity';
 import { GetUser } from 'src/common/decorators/get-user.decorator';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) { }
 
   @Post('register')
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  create(
+    @Body() createUserDto: CreateUserDto,
+    @UploadedFiles() files: Array<Express.Multer.File>
+  ) {
+    const imagePaths = files.map(file => file.path);
+    return this.userService.create(createUserDto, imagePaths);
   }
 
   @Post('login')

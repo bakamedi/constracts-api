@@ -1,5 +1,6 @@
 import { ParentEntity } from "src/common/shared/index-shared";
 import { ContractE } from "src/controllers/contract/entities/contract.entity";
+import { ImagepropertyE } from "src/controllers/imageproperty/entities/imageproperty.entity";
 import { UserE } from "src/controllers/user/entities/user.entity";
 import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 
@@ -55,4 +56,7 @@ export class PropertyE extends ParentEntity {
 
     @OneToMany(() => ContractE, contract => contract.property)
     contracts: ContractE[];
+
+    @OneToMany(() => ImagepropertyE, imageProperty => imageProperty.imagesProperty)
+    imagesProperties: ImagepropertyE[];
 }
