@@ -7,6 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PaginationDto } from 'src/common/shared/pagination.dto';
 import { PaginatedResult } from 'src/common/shared/paginated-result.interface';
+import { ImagepropertyE } from '../imageproperty/entities/imageproperty.entity';
+import { UploadService } from 'src/common/services/upload/upload.service';
 
 @Injectable()
 export class PropertyService {
@@ -14,20 +16,38 @@ export class PropertyService {
   constructor(
 
     @InjectRepository(PropertyE)
+    @InjectRepository(ImagepropertyE)
+    private readonly uploadService: UploadService,
     private readonly propertyRepository: Repository<PropertyE>,
-
+    private readonly imagepropertyRepository: Repository<ImagepropertyE>,
   ) { }
 
-  async create(user: UserE, createPropertyDto: CreatePropertyDto): Promise<PropertyE> {
+  async create(
+    user: UserE,
+    createPropertyDto: CreatePropertyDto,
+    req: any,
+    files: any,
+  ): Promise<PropertyE> {
+    const filePath = await this.uploadService.uploadFile(req, files);
     const propertyDto = this.propertyRepository.create({
       ...createPropertyDto,
       propertyUser: user,
     });
-    return await this.propertyRepository.save(propertyDto);
+
+    const imageProperty = this.imagepropertyRepository.create({
+      imageUrl: filePath,
+      imagesProperty: propertyDto,
+    });
+    //await this.imagepropertyRepository.save(imageProperty);
+    //return await this.propertyRepository.save(propertyDto);
+    throw new InternalServerErrorException({
+      'hola': imageProperty,
+    });
+
 
   }
 
-  async findAll(user: UserE, paginationDto: PaginationDto): Promise<PaginatedResult<PropertyE>>{
+  async findAll(user: UserE, paginationDto: PaginationDto): Promise<PaginatedResult<PropertyE>> {
     const { page, limit } = paginationDto;
     const [results, total] = await this.propertyRepository.findAndCount({
       take: limit,

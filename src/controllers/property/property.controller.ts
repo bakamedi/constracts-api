@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, UploadedFile, Request } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { PropertyService } from './property.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
@@ -10,14 +11,21 @@ import { PaginatedResult } from 'src/common/shared/paginated-result.interface';
 
 @Controller('property')
 export class PropertyController {
-  constructor(private readonly propertyService: PropertyService) { }
+  constructor(
+    private readonly propertyService: PropertyService,
+  ) { }
 
   @Post()
+  @UseInterceptors(FileInterceptor('files'))
   create(
     @GetUser() user: UserE,
+    @UploadedFile() files,
     @Body() createPropertyDto: CreatePropertyDto,
+    @Request() req,
   ) {
-    return this.propertyService.create(user, createPropertyDto);
+    req.user = user;
+    req['user'] = user;
+    return this.propertyService.create(user, createPropertyDto, req, files);
   }
 
   @Get()

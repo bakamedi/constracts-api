@@ -3,7 +3,7 @@
 /node_modules
 
 # Database
-/postgres
+/postgres/
 
 # ENV
 .env

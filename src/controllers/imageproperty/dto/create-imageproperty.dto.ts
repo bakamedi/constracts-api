@@ -1,1 +1,3 @@
-export class CreateImagepropertyDto {}
+export class CreateImagepropertyDto {
+    email: string;
+}
