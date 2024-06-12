@@ -2,11 +2,15 @@ import { UserE } from "src/controllers/user/entities/user.entity";
 import { IsBoolean, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreatePropertyDto {
-    @IsString()
-    name: string;
 
     @IsString()
     address: string;
+
+    @IsNumber()
+    lat: number;
+
+    @IsNumber()
+    lng: number;
 
     @IsNumber()
     rooms: number;

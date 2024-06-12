@@ -5,6 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserE } from './entities/user.entity';
 import { GetUser } from 'src/common/decorators/get-user.decorator';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { LoginUserDto } from './dto/index-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -20,8 +21,8 @@ export class UserController {
   }
 
   @Post('login')
-  login(@Body() createUserDto: CreateUserDto) {
-    return this.userService.login(createUserDto);
+  login(@Body() loginUserDto: LoginUserDto) {
+    return this.userService.login(loginUserDto);
   }
 
   @Get('profile')

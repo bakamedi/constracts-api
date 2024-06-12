@@ -7,10 +7,17 @@ import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 @Entity()
 export class PropertyE extends ParentEntity {
     @Column('text')
-    name: string;
-
-    @Column('text')
     address: string;
+
+    @Column('double precision',{
+        default: 0.0
+    })
+    lat: number;
+
+    @Column('double precision',{
+        default: 0.0
+    })
+    lng: number;
 
     @Column()
     rooms: number;
@@ -18,7 +25,9 @@ export class PropertyE extends ParentEntity {
     @Column()
     bathrooms: number;
 
-    @Column()
+    @Column('double precision', {
+        default: 0.0,
+    })
     price: number;
 
     @Column('bool', {
@@ -36,17 +45,17 @@ export class PropertyE extends ParentEntity {
     })
     internetService: boolean;
 
-    @Column({
+    @Column('double precision',{
         default: 0.0,
     })
     electricServicePrice: number;
 
-    @Column({
+    @Column('double precision',{
         default: 0.0,
     })
     waterServicePrice: number;
 
-    @Column({
+    @Column('double precision',{
         default: 0.0,
     })
     internetServicePrice: number;
